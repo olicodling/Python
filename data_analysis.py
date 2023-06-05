@@ -1,7 +1,3 @@
-## CSV Iterator ##
-#  The csv contains 2 columns which are order_id and a product_id.
-#  
-
 import pandas as pd
 
 def process_order_data(file_path):
@@ -18,12 +14,14 @@ def process_order_data(file_path):
 
         # Iterate over each row in the DataFrame
         for _, row in data.iterrows():
-            order_id = row['order_id']
-            product_id = row['product_id']
-
-            # Validate the order_id and product_id
-            if not isinstance(order_id, int) or not isinstance(product_id, int):
+            # Convert the values to integers if possible
+            try:
+                order_id = int(row['order_id'])
+                product_id = int(row['product_id'])
+            except ValueError:
                 raise ValueError("Invalid order_id or product_id in the CSV file.")
+
+            # Rest of the code remains the same...
 
             # Check if the product is already in the coverage dictionary
             if product_id in product_coverage:
@@ -72,8 +70,9 @@ def process_order_data(file_path):
         print(f"An unexpected error occurred: {ex}")
         return None
 
+
 def main():
-    file_path = 'orders.csv'
+    file_path = 'order_data.csv'
     result = process_order_data(file_path)
     if result is not None:
         print(result)
